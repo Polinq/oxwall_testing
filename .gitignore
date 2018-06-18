@@ -102,3 +102,11 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# PyCharm project settings
+.idea/
+.idea/misc.xml
+.idea/modules.xml
+.idea/oxwall_testing.iml
+.idea/vcs.xml
+.idea/workspace.xml
