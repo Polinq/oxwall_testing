@@ -23,9 +23,45 @@ class AddNewsTestCase(unittest.TestCase):
         user = "admin"
         password = "pass"
         text_news = "New news!"
-        
+
+        self.login(user, password)
+        old_list_of_news = self.get_list_of_news()
+        self.add_new_news(text_news)
+        self.wait_new_news_appearing(old_list_of_news)
+        self.assertEqual(text_news, self.last_news_text_element().text)
+        self.assertEqual(user.title(), self.last_news_user_element().text)
+        self.logout()
+
+    def logout(self):
         driver = self.driver
-        # Login
+        ActionChains(driver).move_to_element(driver.find_element_by_link_text("Admin")).perform()
+        driver.find_element_by_link_text("Sign Out").click()
+
+    def last_news_user_element(self):
+        return self.driver.find_element_by_xpath(
+            "//li[contains(@id,'action-feed')]/div/div[2]/div/div[2]/a/b")
+
+    def last_news_text_element(self):
+        return self.driver.find_element_by_xpath(
+            "//li[contains(@id,'action-feed')]/div/div[2]/div/div[3]")
+
+    def wait_new_news_appearing(self, old_list_of_news):
+        #  Wait for new news to appear
+        self.wait.until(amount_of_elements_located((By.XPATH, "//li[contains(@id,'action-feed')]"),
+                                                   len(old_list_of_news) + 1))
+
+    def add_new_news(self, text_news):
+        driver = self.driver
+        driver.find_element_by_name("status").click()
+        driver.find_element_by_name("status").clear()
+        driver.find_element_by_name("status").send_keys(text_news)
+        driver.find_element_by_name("save").click()
+
+    def get_list_of_news(self):
+        return self.driver.find_elements_by_xpath("//li[contains(@id,'action-feed')]")
+
+    def login(self, user, password):
+        driver = self.driver
         # initiate login
         driver.find_element_by_css_selector("span.ow_signin_label").click()
         driver.find_element_by_name("identity").clear()
@@ -35,26 +71,6 @@ class AddNewsTestCase(unittest.TestCase):
         driver.find_element_by_name("submit").click()
         # Wait until login finished
         self.wait.until_not(visibility_of_element_located((By.ID, "floatbox_overlay")))
-
-        old_list_of_news = driver.find_elements_by_xpath("//li[contains(@id,'action-feed')]")
-
-        # Add news
-        driver.find_element_by_name("status").click()
-        driver.find_element_by_name("status").clear()
-        driver.find_element_by_name("status").send_keys(text_news)
-        driver.find_element_by_name("save").click()
-
-        #  Wait for new news to appear
-        self.wait.until(amount_of_elements_located((By.XPATH, "//li[contains(@id,'action-feed')]"),
-                        len(old_list_of_news)+1))
-        #Verify
-        self.assertEqual(text_news, driver.find_element_by_xpath(
-                "//li[contains(@id,'action-feed')]/div/div[2]/div/div[3]").text)
-        self.assertEqual(user.title(), driver.find_element_by_xpath(
-            "//li[contains(@id,'action-feed')]/div/div[2]/div/div[2]/a/b").text)
-        #Logout
-        ActionChains(driver).move_to_element(driver.find_element_by_link_text("Admin")).perform()
-        driver.find_element_by_link_text("Sign Out").click()
 
     def is_element_present(self, how, what):
         try:
