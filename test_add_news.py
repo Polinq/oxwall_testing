@@ -5,14 +5,17 @@ from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support.expected_conditions import visibility_of_element_located
 import unittest, time
 
 
 class AddNewsTestCase(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Chrome()
-        self.driver.implicitly_wait(30)
+        self.driver.implicitly_wait(1)
         self.base_url = "http://127.0.0.1/oxwall/"
+        self.wait = WebDriverWait(self.driver, 10)
 
     def test_add_text_news(self):
         driver = self.driver
@@ -25,6 +28,8 @@ class AddNewsTestCase(unittest.TestCase):
         driver.find_element_by_name("password").clear()
         driver.find_element_by_name("password").send_keys("pass")
         driver.find_element_by_name("submit").click()
+        # Wait until login finished
+        self.wait.until_not(visibility_of_element_located((By.ID, "floatbox_overlay")))
 
         # Add news
         driver.find_element_by_name("status").click()
