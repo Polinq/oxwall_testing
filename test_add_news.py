@@ -16,18 +16,22 @@ class AddNewsTestCase(unittest.TestCase):
         self.driver = webdriver.Chrome()
         self.driver.implicitly_wait(1)
         self.base_url = "http://127.0.0.1/oxwall/"
+        self.driver.get(self.base_url)
         self.wait = WebDriverWait(self.driver, 10)
 
     def test_add_text_news(self):
+        user = "admin"
+        password = "pass"
+        text_news = "New news!"
+        
         driver = self.driver
-        driver.get(self.base_url)
         # Login
         # initiate login
         driver.find_element_by_css_selector("span.ow_signin_label").click()
         driver.find_element_by_name("identity").clear()
-        driver.find_element_by_name("identity").send_keys("admin")
+        driver.find_element_by_name("identity").send_keys(user)
         driver.find_element_by_name("password").clear()
-        driver.find_element_by_name("password").send_keys("pass")
+        driver.find_element_by_name("password").send_keys(password)
         driver.find_element_by_name("submit").click()
         # Wait until login finished
         self.wait.until_not(visibility_of_element_located((By.ID, "floatbox_overlay")))
@@ -37,16 +41,16 @@ class AddNewsTestCase(unittest.TestCase):
         # Add news
         driver.find_element_by_name("status").click()
         driver.find_element_by_name("status").clear()
-        driver.find_element_by_name("status").send_keys("New news!")
+        driver.find_element_by_name("status").send_keys(text_news)
         driver.find_element_by_name("save").click()
 
         #  Wait for new news to appear
         self.wait.until(amount_of_elements_located((By.XPATH, "//li[contains(@id,'action-feed')]"),
                         len(old_list_of_news)+1))
         #Verify
-        self.assertEqual("New news!", driver.find_element_by_xpath(
+        self.assertEqual(text_news, driver.find_element_by_xpath(
                 "//li[contains(@id,'action-feed')]/div/div[2]/div/div[3]").text)
-        self.assertEqual("Admin", driver.find_element_by_xpath(
+        self.assertEqual(user.title(), driver.find_element_by_xpath(
             "//li[contains(@id,'action-feed')]/div/div[2]/div/div[2]/a/b").text)
         #Logout
         ActionChains(driver).move_to_element(driver.find_element_by_link_text("Admin")).perform()
