@@ -7,6 +7,7 @@ from selenium.common.exceptions import NoAlertPresentException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support.expected_conditions import visibility_of_element_located
+from custom_expected_condition.expected_condition import amount_of_elements_located
 import unittest, time
 
 
@@ -31,12 +32,18 @@ class AddNewsTestCase(unittest.TestCase):
         # Wait until login finished
         self.wait.until_not(visibility_of_element_located((By.ID, "floatbox_overlay")))
 
+        old_list_of_news = driver.find_elements_by_xpath("//li[contains(@id,'action-feed')]")
+
         # Add news
         driver.find_element_by_name("status").click()
         driver.find_element_by_name("status").clear()
         driver.find_element_by_name("status").send_keys("New news!")
         driver.find_element_by_name("save").click()
 
+        #  Wait for new news to appear
+        self.wait.until(amount_of_elements_located((By.XPATH, "//li[contains(@id,'action-feed')]"),
+                        len(old_list_of_news)+1))
+        #Verify
         self.assertEqual("New news!", driver.find_element_by_xpath(
                 "//li[contains(@id,'action-feed')]/div/div[2]/div/div[3]").text)
         self.assertEqual("Admin", driver.find_element_by_xpath(
