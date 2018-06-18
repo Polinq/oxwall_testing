@@ -4,11 +4,11 @@ from oxwall_application import OxwallApp
 
 class AddNewsTestCase(unittest.TestCase):
     def setUp(self):
-        self.app = OxwallApp()
+        self.app = OxwallApp(base_url="https://demo.oxwall.com/")
 
     def test_add_text_news(self):
-        user = "admin"
-        password = "pass"
+        user = "demo"
+        password = "demo"
         text_news = "New news!"
         app = self.app
 
@@ -18,7 +18,7 @@ class AddNewsTestCase(unittest.TestCase):
         app.wait_new_news_appearing(old_list_of_news)
         self.assertEqual(text_news, app.last_news_text_element().text)
         self.assertEqual(user.title(), app.last_news_user_element().text)
-        app.logout()
+        app.logout(user)
 
     def tearDown(self):
         self.app.close()

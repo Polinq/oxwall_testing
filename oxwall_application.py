@@ -11,12 +11,12 @@ from custom_expected_condition.expected_condition import amount_of_elements_loca
 
 
 class OxwallApp:
-    def __init__(self):
+    def __init__(self, base_url="http://127.0.0.1/oxwall/"):
         # Open Oxwall UI in browser
         self.driver = webdriver.Chrome()
         self.driver.implicitly_wait(1)
         self.wait = WebDriverWait(self.driver, 10)
-        self.base_url = "http://127.0.0.1/oxwall/"
+        self.base_url = base_url
         self.driver.get(self.base_url)
 
     def close(self):
@@ -38,9 +38,9 @@ class OxwallApp:
     def go_to_members_page(self):
         self.driver.find_element_by_link_text("MEMBERS").click()
 
-    def logout(self):
+    def logout(self, user):
         driver = self.driver
-        ActionChains(driver).move_to_element(driver.find_element_by_link_text("Admin")).perform()
+        ActionChains(driver).move_to_element(driver.find_element_by_link_text(user.title())).perform()
         driver.find_element_by_link_text("Sign Out").click()
 
     def add_new_news(self, text_news):
