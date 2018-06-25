@@ -45,11 +45,12 @@ class OxwallApp:
         ActionChains(driver).move_to_element(driver.find_element_by_link_text(user.username.title())).perform()
         driver.find_element_by_link_text("Sign Out").click()
 
-    def add_new_news(self, text_news):
+    def add_new_news(self, news):
         driver = self.driver
-        driver.find_element_by_name("status").click()
-        driver.find_element_by_name("status").clear()
-        driver.find_element_by_name("status").send_keys(text_news)
+        news_text_field = driver.find_element_by_name("status")
+        news_text_field.click()
+        news_text_field.clear()
+        news_text_field.send_keys(news.text)
         driver.find_element_by_name("save").click()
 
     def last_news_user_element(self):
