@@ -22,14 +22,16 @@ class OxwallApp:
     def close(self):
         self.driver.quit()
 
-    def login(self, user, password):
+    def login(self, user):
         driver = self.driver
         # initiate login
         driver.find_element_by_css_selector("span.ow_signin_label").click()
-        driver.find_element_by_name("identity").clear()
-        driver.find_element_by_name("identity").send_keys(user)
-        driver.find_element_by_name("password").clear()
-        driver.find_element_by_name("password").send_keys(password)
+        username_field = driver.find_element_by_name("identity")
+        username_field.clear()
+        username_field.send_keys(user.username)
+        password_field = driver.find_element_by_name("password")
+        password_field.clear()
+        password_field.send_keys(user.password)
         driver.find_element_by_name("submit").click()
         # Wait until login finished
         self.wait.until_not(visibility_of_element_located((By.ID, "floatbox_overlay")))
@@ -40,7 +42,7 @@ class OxwallApp:
 
     def logout(self, user):
         driver = self.driver
-        ActionChains(driver).move_to_element(driver.find_element_by_link_text(user.title())).perform()
+        ActionChains(driver).move_to_element(driver.find_element_by_link_text(user.username.title())).perform()
         driver.find_element_by_link_text("Sign Out").click()
 
     def add_new_news(self, text_news):
