@@ -48,7 +48,7 @@ class OxwallApp:
     def add_new_news(self, news):
         driver = self.driver
         news_text_field = driver.find_element_by_name("status")
-        news_text_field.click()
+        # news_text_field.click()
         news_text_field.clear()
         news_text_field.send_keys(news.text)
         driver.find_element_by_name("save").click()

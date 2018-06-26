@@ -1,13 +1,16 @@
 from models.news import News
 import pytest
+import json
 
-news_list = [
-    News(text="New news!"),
-    News(text="Привет!")
-]
+with open("data_news.json", encoding="utf8") as f:
+    news_list = json.load(f)
 
 
-@pytest.mark.parametrize("news", news_list, ids=[repr(news) for news in news_list])
+@pytest.fixture(params=news_list, ids=[repr(news) for news in news_list])
+def news(request):
+    return News(**request.param)
+
+
 def test_add_text_news(app, logged_user, news):
     old_list_of_news = app.get_list_of_news()
     app.add_new_news(news)
