@@ -1,8 +1,14 @@
 from models.news import News
+import pytest
+
+news_list = [
+    News(text="New news!"),
+    News(text="Привет!")
+]
 
 
-def test_add_text_news(app, logged_user):
-    news = News(text="New news!")
+@pytest.mark.parametrize("news", news_list, ids=[repr(news) for news in news_list])
+def test_add_text_news(app, logged_user, news):
     old_list_of_news = app.get_list_of_news()
     app.add_new_news(news)
     app.wait_new_news_appearing(old_list_of_news)
