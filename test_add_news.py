@@ -4,9 +4,9 @@ import json
 from data.random_string import random_string
 
 with open("data_news.json", encoding="utf8") as f:
-    news_list = json.load(f)
+    news_list = []# json.load(f)
 
-news_list += [{"text": random_string(255)} for _ in range(2)]
+news_list += [{"text": random_string(50, cyrillic=True)} for _ in range(2)]
 
 
 @pytest.fixture(params=news_list, ids=[repr(news) for news in news_list])
