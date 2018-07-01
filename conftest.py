@@ -2,11 +2,15 @@ import pytest
 from oxwall_application import OxwallApp
 from models.user import User
 import json
+import os.path
+
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 @pytest.fixture(scope="session")
 def config():
-    with open("config.json") as f:
+    filename = os.path.join(PROJECT_DIR, "config.json")
+    with open(filename) as f:
         return json.load(f)
 
 

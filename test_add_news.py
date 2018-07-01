@@ -1,12 +1,6 @@
 from models.news import News
 import pytest
-import json
-from data.random_string import random_string
-
-with open("data_news.json", encoding="utf8") as f:
-    news_list = []# json.load(f)
-
-news_list += [{"text": random_string(50, cyrillic=True)} for _ in range(2)]
+from data.news_data import news_list
 
 
 @pytest.fixture(params=news_list, ids=[repr(news) for news in news_list])
