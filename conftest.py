@@ -27,3 +27,8 @@ def logged_user(app, config):
     app.login(user)
     yield user
     app.logout(user)
+
+
+@pytest.fixture()
+def admin(config):
+    return User(**config["admin"])

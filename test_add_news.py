@@ -9,9 +9,9 @@ def news(request):
 
 
 def test_add_text_news(app, logged_user, news):
-    old_list_of_news = app.get_list_of_news()
+    # old_list_of_news = app.dash_page.newsfeeds
     app.add_new_news(news)
-    app.wait_new_news_appearing(old_list_of_news)
+    app.dash_page.wait_new_news_appearing()
     assert news.text == app.last_news_text_element().text
     assert logged_user.username.title() == app.last_news_user_element().text
 
