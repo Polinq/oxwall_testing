@@ -25,11 +25,9 @@ class OxwallApp:
     def login(self, user):
         self.main_page.sign_in_link.click()
         username_field = self.login_window.username_field
-        username_field.clear()
-        username_field.send_keys(user.username)
+        username_field.input(user.username)
         password_field = self.login_window.password_field
-        password_field.clear()
-        password_field.send_keys(user.password)
+        password_field.input(user.password)
         self.login_window.click_sing_in_btn()
 
     def go_to_members_page(self):
@@ -44,19 +42,8 @@ class OxwallApp:
 
     def add_new_news(self, news):
         news_text_field = self.dash_page.news_text_field
-        news_text_field.clear()
-        news_text_field.send_keys(news.text)
+        news_text_field.input(news.text)
         self.dash_page.send_button.click()
-
-    def last_news_user_element(self):
-        # TODO It will be removed. Not needed in Page Element Object concept
-        return self.driver.find_element_by_xpath(
-            "//li[contains(@id,'action-feed')]/div/div[2]/div/div[2]/a/b")
-
-    def last_news_text_element(self):
-        # TODO It will be removed. Not needed in Page Element Object concept
-        return self.driver.find_element_by_xpath(
-            "//li[contains(@id,'action-feed')]/div/div[2]/div/div[3]")
 
     def wait_new_news_appearing(self, old_list_of_news):
         #  Wait for new news to appear

@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.expected_conditions import visibility_of_element_located
 
 from pages.base_page import Page
+from pages.elements.input_field import InputTextElement
 
 
 class LoginWindow(Page):
@@ -13,11 +14,11 @@ class LoginWindow(Page):
 
     @property
     def username_field(self):
-        return self.find_visible_element(self._USERNAME_FIELD)
+        return InputTextElement(self.find_visible_element(self._USERNAME_FIELD))
 
     @property
     def password_field(self):
-        return self.find_visible_element(self._PASSWORD_FIELD)
+        return InputTextElement(self.find_visible_element(self._PASSWORD_FIELD))
 
     @property
     def sign_in_button(self):
@@ -31,6 +32,6 @@ class LoginWindow(Page):
         self._wait.until_not(visibility_of_element_located(self._DARK_OVERLAY))
 
     def login_as(self, user):
-        self.username_field.send_keys(user.username)
-        self.password_field.send_keys(user.password)
+        self.username_field.input(user.username)
+        self.password_field.input(user.password)
         self.sign_in_button()

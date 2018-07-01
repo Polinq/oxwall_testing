@@ -1,6 +1,8 @@
 from selenium.webdriver.common.by import By
 
 from custom_expected_condition.expected_condition import amount_of_elements_located
+from pages.elements.input_field import InputTextElement
+from pages.elements.newsfeed import NewsfeedElement
 from pages.internal_page import InternalPage
 
 
@@ -11,7 +13,7 @@ class DashboardPage(InternalPage):
 
     @property
     def news_text_field(self):
-        return self.find_visible_element(self._NEWS_TEXT_FIELD)
+        return InputTextElement(self.find_visible_element(self._NEWS_TEXT_FIELD))
 
     @property
     def send_button(self):
@@ -20,7 +22,8 @@ class DashboardPage(InternalPage):
     @property
     def newsfeeds(self):
         """ Return list of elements """
-        return self.driver.find_elements(*self._NEWSFEEDS)
+        els = [NewsfeedElement(el) for el in self.driver.find_elements(*self._NEWSFEEDS)]
+        return els
 
     def is_here(self):
         #TODO
