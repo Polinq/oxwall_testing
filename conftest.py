@@ -15,8 +15,8 @@ def config():
 
 
 @pytest.fixture()
-def app(config):
-    app = OxwallApp(base_url=config["base_url"])
+def app(selenium, config):
+    app = OxwallApp(driver=selenium, base_url=config["base_url"])
     yield app
     app.close()
 

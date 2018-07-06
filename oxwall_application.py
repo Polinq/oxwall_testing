@@ -7,9 +7,9 @@ from pages.login_window import LoginWindow
 
 
 class OxwallApp:
-    def __init__(self, base_url="http://127.0.0.1/oxwall/"):
+    def __init__(self, driver, base_url="http://127.0.0.1/oxwall/"):
         # Open Oxwall UI in browser
-        self.driver = webdriver.Chrome()
+        self.driver = driver
         self.driver.implicitly_wait(1)
         self.wait = WebDriverWait(self.driver, 10)
         self.base_url = base_url
