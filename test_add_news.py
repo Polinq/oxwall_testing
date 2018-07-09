@@ -8,13 +8,13 @@ def news(request):
     return News(**request.param)
 
 
-def test_add_text_news(app, logged_user, news):
+def test_add_text_news(app, logged_admin, news):
     # old_list_of_news = app.dash_page.newsfeeds
     app.add_new_news(news)
     app.dash_page.wait_new_news_appearing()
     assert news.text == app.dash_page.newsfeeds[0].news_text
-    assert logged_user.username.title() == app.dash_page.newsfeeds[0].user
+    assert logged_admin.username.title() == app.dash_page.newsfeeds[0].user
 
 
-def test_add_news_with_photo(app, logged_user):
+def test_add_news_with_photo(app, logged_admin):
     pass
