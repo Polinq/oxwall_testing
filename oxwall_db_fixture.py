@@ -1,5 +1,7 @@
+import json
 import pymysql
 
+from models.news import News
 from models.user import User
 
 
@@ -40,6 +42,28 @@ class OxwallDB:
             result = [User(**user) for user in cursor]
         self.connection.commit()
         return result
+
+    def get_last_news(self):
+        """ Get newsfeed with maximum id that is last added """
+        with self.connection.cursor() as cursor:
+            sql = """SELECT * FROM `ow_newsfeed_action` 
+                     WHERE `id`= (SELECT MAX(`id`) FROM `ow_newsfeed_action`)
+                     AND `entityType`="user-status"
+                     """
+            cursor.execute(sql)
+            line = cursor.fetchone()
+            data = json.loads(line["data"])
+        self.connection.commit()
+        return News(text=data["status"])
+
+    def count_news(self):
+        with self.connection.cursor() as cursor:
+            sql = """SELECT COUNT(*) FROM `ow_newsfeed_action` 
+                     WHERE `entityType`="user-status"
+                  """
+            cursor.execute(sql)
+        self.connection.commit()
+        return cursor.fetchone()['COUNT(*)']
 
 
 if __name__ == "__main__":
