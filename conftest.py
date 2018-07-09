@@ -7,9 +7,14 @@ import os.path
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
+def pytest_addoption(parser):
+    parser.addoption("--config", action="store", default="config.json", help="config file")
+
+
 @pytest.fixture(scope="session")
-def config():
-    filename = os.path.join(PROJECT_DIR, "config.json")
+def config(request):
+    filename = request.config.getoption("--config")
+    filename = os.path.join(PROJECT_DIR, filename)
     with open(filename) as f:
         return json.load(f)
 
