@@ -36,7 +36,7 @@ def admin(config):
 def logged_admin(app, admin):
     app.login(admin)
     yield admin
-    app.logout(admin)
+    app.logout()
 
 
 @pytest.fixture(scope="session")

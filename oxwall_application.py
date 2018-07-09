@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
+
+from pages.internal_page import InternalPage
 from pages.internal_pages.dashboard_page import DashboardPage
 from pages.internal_pages.main_page import MainPage
 from pages.login_window import LoginWindow
@@ -15,6 +17,7 @@ class OxwallApp:
         self.base_url = base_url
         self.driver.get(self.base_url)
 
+        self._any_internal_page = InternalPage(self.driver)
         self.main_page = MainPage(self.driver)
         self.login_window = LoginWindow(self.driver)
         self.dash_page = DashboardPage(self.driver)
@@ -31,14 +34,11 @@ class OxwallApp:
         self.login_window.click_sing_in_btn()
 
     def go_to_members_page(self):
-        # TODO change to Page Object
-        self.driver.find_element_by_link_text("MEMBERS").click()
+        self._any_internal_page.members_link.click()
 
-    def logout(self, user):
-        # TODO change to Page Object
-        driver = self.driver
-        ActionChains(driver).move_to_element(driver.find_element_by_link_text(user.username.title())).perform()
-        driver.find_element_by_link_text("Sign Out").click()
+    def logout(self):
+        page = self._any_internal_page
+        page.sign_out()
 
     def add_new_news(self, news):
         news_text_field = self.dash_page.news_text_field
