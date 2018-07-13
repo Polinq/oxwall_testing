@@ -1,9 +1,9 @@
 import pytest
-from oxwall_application import OxwallApp
-from oxwall_db_fixture import OxwallDB
+from fixtures.oxwall_application import OxwallApp
+from fixtures.oxwall_db_fixture import OxwallDB
 from models.user import User
 import json
-import os.path
+import os
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 
