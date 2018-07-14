@@ -33,3 +33,14 @@ class DashboardPage(InternalPage):
         #  Wait for new news to appear
         self._wait.until(amount_of_elements_located(self._NEWSFEEDS,
                                                    len(self.newsfeeds) + 1))
+
+    def delete_newsfeed(self, newsfeed):
+        # newsfeed = self.newsfeeds[number]
+        self.move_to_element(newsfeed.webelement)
+        self.action.move_to_element(self.driver.find_element_by_css_selector("div.ow_newsfeed_context_menu_wrap")).perform()
+        self.action.move_to_element(self.driver.find_element_by_css_selector("div.ow_context_action")).perform()
+        self.action.move_to_element(self.driver.find_element_by_css_selector("span.ow_context_more")).perform()
+        self.action.move_to_element(self.driver.find_element_by_css_selector("div.ow_context_action")).perform()
+        self.move_to_element(newsfeed.context)
+        newsfeed.delete_button.click()
+        self.alert.accept()

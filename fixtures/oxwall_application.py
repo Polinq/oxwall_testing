@@ -1,3 +1,4 @@
+import allure
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
@@ -25,6 +26,7 @@ class OxwallApp:
     def close(self):
         self.driver.quit()
 
+    @allure.step("I log as {user}")
     def login(self, user):
         self.main_page.sign_in_link.click()
         username_field = self.login_window.username_field
@@ -33,18 +35,22 @@ class OxwallApp:
         password_field.input(user.password)
         self.login_window.click_sing_in_btn()
 
+    @allure.step("WHEN I open a members page")
     def go_to_members_page(self):
         self._any_internal_page.members_link.click()
 
+    @allure.step("I log out")
     def logout(self):
         page = self._any_internal_page
         page.sign_out()
 
+    @allure.step("WHEN I add a new news {news}")
     def add_new_news(self, news):
         news_text_field = self.dash_page.news_text_field
         news_text_field.input(news.text)
         self.dash_page.send_button.click()
 
+    @allure.step("WHEN I wait for a new news appearing")
     def wait_new_news_appearing(self, old_list_of_news):
         #  Wait for new news to appear
         self.dash_page.wait_new_news_appearing()

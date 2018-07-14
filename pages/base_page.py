@@ -1,4 +1,4 @@
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, NoAlertPresentException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support.expected_conditions import visibility_of_element_located, element_to_be_clickable
@@ -17,6 +17,14 @@ class Page:
             return False
         return True
 
+    @property
+    def alert(self):
+        try:
+            alert = self.driver.switch_to.alert()
+        except NoAlertPresentException as e:
+            return False
+        return alert
+
     def find_visible_element(self, locator):
         return self._wait.until(visibility_of_element_located(locator))
 
@@ -24,7 +32,7 @@ class Page:
         return self._wait.until(element_to_be_clickable(locator))
 
     def move_to_element(self, element):
-        self.action.move_to_element(element).perform()
+        self.action.move_to_element(element).pause(1).perform()
 
     @property
     def current_url(self):

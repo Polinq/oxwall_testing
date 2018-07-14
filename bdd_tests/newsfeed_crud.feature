@@ -14,6 +14,6 @@ Feature: Newsfeed (status) feature
 
     Examples:
     | text             |
+    | !@#%^&<a *%^*{}))_+ |
     | New 1234098765!  |
     | Привіт!          |
-    | !@#%^&*%^*{}))_+ |

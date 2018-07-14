@@ -34,6 +34,6 @@ def wait_new_news(app):
 @then("this newsfeed block is with this text and author as Admin")
 def verify_newsfeed_block(app, db, news, old_news_amount, logged_admin):
     assert old_news_amount + 1 == db.count_news()
-    assert news.text == db.get_last_news().text
+    assert news.text == db.get_last_news().text, "Not correct text"
     assert news.text == app.dash_page.newsfeeds[0].news_text
     assert logged_admin.username.title() == app.dash_page.newsfeeds[0].user
