@@ -4,12 +4,33 @@ from fixtures.oxwall_db_fixture import OxwallDB
 from models.user import User
 import json
 import os.path
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.microsoft import EdgeDriverManager
+from webdriver_manager.microsoft import IEDriverManager
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def pytest_addoption(parser):
     parser.addoption("--config", action="store", default="config.json", help="config file")
+    parser.addoption("--browser", action="store", default="Chrome")
+
+
+@pytest.fixture()
+def driver(request):
+    option = request.config.getoption("--browser")
+    if option.lower() == "chrome":
+        return webdriver.Chrome(ChromeDriverManager().install())
+    elif option == "firefox":
+        return webdriver.Firefox(executable_path=GeckoDriverManager().install())
+    elif option == "edge":
+        return webdriver.Edge(EdgeDriverManager().install())
+    elif option == "ie":
+        return webdriver.Ie(IEDriverManager().install())
+    else:
+        raise ValueError("Unrecognized browser {}".format(option))
 
 
 @pytest.fixture(scope="session")
@@ -21,8 +42,8 @@ def config(request):
 
 
 @pytest.fixture()
-def app(selenium, config):
-    app = OxwallApp(driver=selenium, base_url=config["web"]["base_url"])
+def app(driver, config):
+    app = OxwallApp(driver=driver, base_url=config["web"]["base_url"])
     yield app
     app.close()
 
