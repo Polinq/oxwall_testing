@@ -42,8 +42,9 @@ def config(request):
 
 
 @pytest.fixture()
-def app(driver, config):
-    app = OxwallApp(driver=driver, base_url=config["web"]["base_url"])
+def app(driver, config, request):
+    base_url = request.config.getoption("--base-url")
+    app = OxwallApp(driver=driver, base_url=base_url)
     yield app
     app.close()
 
