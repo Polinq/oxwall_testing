@@ -1,4 +1,5 @@
 import json
+import allure
 import pymysql
 
 from models.news import News
@@ -21,6 +22,7 @@ class OxwallDB:
             cursorclass=pymysql.cursors.DictCursor
         )
 
+    @allure.step("GIVEN created {user} in DB")
     def create_user(self, user):
         with self.connection.cursor() as cursor:
             sql = """INSERT INTO `ow_base_user` (`username`, `email`, `password`) 
@@ -28,6 +30,7 @@ class OxwallDB:
             cursor.execute(sql)
         self.connection.commit()
 
+    @allure.step("{user} is deleted from DB")
     def delete_user(self, user):
         with self.connection.cursor() as cursor:
             sql = """DELETE FROM `ow_base_user` 
@@ -56,6 +59,7 @@ class OxwallDB:
         self.connection.commit()
         return News(text=data["status"])
 
+    @allure.step("GIVEN some amount of news in DB")
     def count_news(self):
         with self.connection.cursor() as cursor:
             sql = """SELECT COUNT(*) FROM `ow_newsfeed_action` 
